@@ -1,0 +1,14 @@
+================================================================================
+MAKEFILE MODIFICATIONS FOR XV6
+================================================================================
+
+1. Add system call objects to OBJS in Makefile:
+   $K/shm.o \
+   $K/sync.o \
+
+2. Add user programs to UPROGS in Makefile:
+   $U/_peterson\
+   $U/_prodcons\
+   $U/_readwrite\
+   $U/_dining\
+================================================================================

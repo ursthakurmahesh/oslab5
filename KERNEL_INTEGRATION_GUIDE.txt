@@ -1,0 +1,62 @@
+================================================================================
+HOW TO INTEGRATE SYSCALLS INTO STANDARD XV6 (PREVENTS BREAKING MAKE QEMU)
+================================================================================
+
+1. Copy new source files into xv6:
+   - Copy kernel/shm.h, kernel/shm.c, kernel/sync.h, kernel/sync.c -> kernel/
+   - Copy user/peterson.c, user/prodcons.c, user/readwrite.c, user/dining.c -> user/
+
+2. In kernel/syscall.h, add:
+   #define SYS_shm_get    22
+   #define SYS_sem_create 23
+   #define SYS_sem_wait   24
+   #define SYS_sem_post   25
+
+3. In kernel/sysproc.c, APPEND at the very end:
+   #include "shm.h"
+   #include "sync.h"
+
+   uint64 sys_shm_get(void) { int id; argint(0, &id); return shm_get(id); }
+   uint64 sys_sem_create(void) { int val; argint(0, &val); return sem_create(val); }
+   uint64 sys_sem_wait(void) { int id; argint(0, &id); return sem_wait(id); }
+   uint64 sys_sem_post(void) { int id; argint(0, &id); return sem_post(id); }
+
+4. In kernel/syscall.c, ADD prototype declarations & entry in syscalls array:
+   extern uint64 sys_shm_get(void);
+   extern uint64 sys_sem_create(void);
+   extern uint64 sys_sem_wait(void);
+   extern uint64 sys_sem_post(void);
+
+   [SYS_shm_get]    sys_shm_get,
+   [SYS_sem_create] sys_sem_create,
+   [SYS_sem_wait]   sys_sem_wait,
+   [SYS_sem_post]   sys_sem_post,
+
+5. In kernel/defs.h, ADD:
+   void   shm_init(void);
+   uint64 shm_get(int);
+   void   sem_sys_init(void);
+   int    sem_create(int);
+   int    sem_wait(int);
+   int    sem_post(int);
+
+6. In kernel/main.c, ADD initialization inside main():
+   shm_init();
+   sem_sys_init();
+
+7. In user/usys.pl, ADD:
+   entry("shm_get");
+   entry("sem_create");
+   entry("sem_wait");
+   entry("sem_post");
+
+8. In user/user.h, ADD:
+   void* shm_get(int id);
+   int sem_create(int init_val);
+   int sem_wait(int sem_id);
+   int sem_post(int sem_id);
+
+9. In Makefile, ADD:
+   OBJS array: $K/shm.o $K/sync.o
+   UPROGS array: $U/_peterson $U/_prodcons $U/_readwrite $U/_dining
+================================================================================

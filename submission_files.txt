@@ -1,0 +1,16 @@
+2401MC58_Mahesh_Assignment5/
+├── README.md
+├── Makefile_additions.txt
+├── submission_files.txt
+├── Q1/
+│   ├── user/peterson.c
+│   └── kernel/ (shm.h, shm.c, sysproc.c, syscall.h, defs.h, syscall.c, proc.c)
+├── Q2/
+│   ├── user/prodcons.c
+│   └── kernel/ (sync.h, sync.c, sysproc.c, syscall.h, defs.h, syscall.c)
+├── Q3/
+│   ├── user/readwrite.c
+│   └── kernel/ (shm.h, shm.c, sync.h, sync.c, sysproc.c, syscall.h, defs.h, syscall.c)
+└── Q4/
+    ├── user/dining.c
+    └── kernel/ (shm.h, shm.c, sync.h, sync.c, sysproc.c, syscall.h, defs.h, syscall.c)
